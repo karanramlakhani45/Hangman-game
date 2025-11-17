@@ -1,32 +1,81 @@
+# Hangman (React + Vite)
 
-🎮 Hangman Game
+Modern, responsive Hangman game built with React, Vite, and modular components. Guess words from a curated tech-themed list, track remaining lives, and enjoy animated SVG gallows plus both physical keyboard support and an on-screen keyboard.
 
-A simple implementation of the classic Hangman word-guessing game. The player tries to guess the hidden word one letter at a time. Each wrong guess brings the hangman closer to being "hanged." The game ends when the player either guesses the word correctly or the hangman is completed.
+## Features
 
-✨ Features
+- 🎯 Randomized secret words with win/loss detection and automatic reset
+- 🧠 Custom `useHangman` hook encapsulates game logic and exposes helper actions/state
+- ⌨️ Dual input: type letters or tap the virtual keyboard (with visual feedback)
+- ❤️ Lives counter, status banner, and letter-by-letter word reveal
+- 🧵 SVG gallows drawing that animates as wrong guesses pile up
+- 📱 Responsive layout with semantic HTML, accessible labels, and polished styling
 
-Random word selection from a predefined list.
+## Tech Stack
 
-Displays blanks and updates them as correct letters are guessed.
+- React 18 + Vite 7
+- Hooks + functional components
+- CSS modules scoped to `src/App.css`, `src/index.css`, `src/styles/theme.css`, and component-level styles (e.g., `components/hangman.css`)
+- PropTypes for runtime prop validation
 
-Tracks wrong guesses and remaining attempts.
+## Getting Started
 
-ASCII art / graphical hangman representation (optional).
+```bash
+# install dependencies
+npm install
 
-Replay option after game ends.
+# start dev server
+npm run dev
 
-🚀 How to Play
+# build for production
+npm run build
+```
 
-The computer selects a random word.
+The dev server outputs a local URL (usually `http://localhost:5173`). Press `Enter` in the game to restart a round after winning or losing.
 
-The player guesses one letter at a time.
+## Project Structure
 
-If the guess is correct → the letter is revealed in the word.
+```
+src/
+├── App.jsx           # Shell layout + wiring of components
+├── App.css           # Page-level layout + responsive presentation
+├── index.css         # Global resets + theme import
+├── styles/theme.css  # Theme tokens (colors, fonts, shadows)
+├── components/
+│   ├── GameBanner.jsx
+│   ├── HangmanFigure.jsx
+│   ├── Keyboard.jsx
+│   ├── LetterInput.jsx
+│   ├── LivesCounter.jsx
+│   ├── WordDisplay.jsx
+│   └── hangman.css   # SVG-specific styles
+└── hooks/
+    └── useHangman.js # Core game logic, word bank, input guards
+```
 
-If the guess is wrong → a part of the hangman is drawn.
+## Customization Tips
 
-The game continues until:
+- Add or replace words in `src/hooks/useHangman.js` (`WORD_BANK` array).
+- Tweak `MAX_ATTEMPTS` to adjust difficulty.
+- Fonts/colors live in `src/styles/theme.css`; update tokens to rebrand quickly.
+- Keyboard layout is defined inside `Keyboard.jsx`; alter `KEY_LAYOUT` for alternative alphabets.
 
-The player guesses the full word ✅
+## License
 
-OR the hangman is completely drawn ❌
+This project is provided as-is for educational/demo purposes. Feel free to adapt it within your own projects. PRs and enhancements welcome!
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
