@@ -1,43 +1,96 @@
-# Hangman Game
+🎮 Hangman Game
 
-This project delivers a modern browser-based Hangman experience built with vanilla HTML, CSS, and JavaScript. It also ships with documentation assets often required for academic submissions (report, synopsis, PPT outline, etc.).
+A simple and interactive Hangman Game built using HTML, CSS, and JavaScript.
+Guess the correct word before the hangman drawing is completed!
 
-## Prerequisites
+🚀 Demo
 
-- Any modern desktop or mobile browser (Chrome, Edge, Firefox, Safari)
-- Optional: A simple HTTP server (only needed if you plan to serve from `http://localhost`; double-clicking `index.html` works fine)
+(Add your live link here if deployed, e.g., Netlify or GitHub Pages)
+Live Demo: Coming soon
 
-## Running the Demo
+📌 Features
 
-1. Download or clone the project folder.
-2. Open `index.html` in your preferred browser.
-3. Guess letters either by clicking the on-screen keyboard or typing on your hardware keyboard.
+✔️ Clean and responsive UI
+✔️ Random word selection
+✔️ Tracks correct & incorrect guesses
+✔️ Hangman figure appears step-by-step
+✔️ Win and lose popups
+✔️ Keyboard letter clicking support
+✔️ Easy to customize or extend
 
-## Project Structure
+🖥️ Tech Stack
 
-- `index.html`, `style.css`, `script.js` – core web app
-- `docs/` – project report, synopsis, user manual, and supporting info
-- `assets/mockup.png` – reference screenshot used in the report
-- `extras/` – optional presentation deck outline
-- `hangman_words.sql` – sample database script that stores the playable words and hints
+HTML5 – Structure
 
-## Rebuilding / Customizing
+CSS3 – Styling and layout
 
-- Update the `WORDS` array in `script.js` or seed additional words via the SQL script.
-- Adjust styling tokens (colors, fonts, spacing) in `style.css`.
-- The UI is responsive out-of-the-box; tweak grid breakpoints around the `.game` selector for layout changes.
+JavaScript (ES6) – Game logic & interactivity
 
-## Testing
+📂 Project Structure
+📁 hangman-game
+ ├── 📄 index.html
+ ├── 🎨 style.css
+ ├── ⚙️ script.js
+ └── 📄 README.md
 
-Manual smoke tests are described in `docs/ProjectReport.md`. Run them after any gameplay tweak to make sure win/loss detection, keyboard handling, and reset flows behave as expected.
+📜 How to Play
 
-## Packaging for Submission
+A random word is chosen automatically.
 
-1. Print/export `docs/ProjectReport.md` to PDF for the “printed copy”.
-2. Bundle the full folder (or a zipped archive) as the “soft copy”.
-3. Include `extras/Presentation.pptx` (generated from the outline) and `docs/UserManual.md` if your evaluator requests the optional assets.
+Guess letters using the on-screen keyboard or your keyboard.
 
-## License
+Correct letters appear in place.
 
-This project is provided for academic demonstration purposes. Adapt and extend as needed for your coursework.
+Wrong guesses draw parts of the hangman.
 
+Win if you guess all letters before the hangman is fully drawn.
+
+Lose if the hangman is completed.
+
+🧠 Game Logic Overview
+
+A Set() stores correct letters guessed.
+
+A wrong letter array counts incorrect guesses.
+
+DOM updates reflect current progress.
+
+Hangman parts are revealed one-by-one.
+
+
+🛠️ Setup & Usage
+
+Clone the repository:
+
+git clone https://github.com/your-username/hangman-game.git
+
+Open the project folder.
+
+Run index.html in any browser.
+
+That's it—no installation required!
+
+✨ Customization
+
+You can adjust:
+
+Words list
+
+Hangman design
+
+Themes
+
+Button styles
+
+Animations
+
+All from script.js and style.css.
+
+🤝 Contributing
+
+Pull requests are welcome!
+For major changes, please open an issue first to discuss what you want to improve.
+
+📄 License
+
+This project is open-source and available under the MIT License.
