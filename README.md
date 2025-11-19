@@ -62,7 +62,8 @@ Hangman parts are revealed one-by-one.
 
 Clone the repository:
 
-git clone https://github.com/karanramlakhani45/Hangman-game
+git clone  git clone https:/karanramlakhani45/github.com//hangman-game.git
+
 
 Open the project folder.
 
@@ -94,4 +95,5 @@ For major changes, please open an issue first to discuss what you want to improv
 📄 License
 
 This project is open-source and available under the MIT License.
+
 
