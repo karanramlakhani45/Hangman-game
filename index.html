@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hangman</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Classic Word Challenge</p>
+          <h1>Hangman Game</h1>
+          <p class="subtitle">
+            Guess the hidden tech term before the figure is complete.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <div class="lives" aria-live="polite">
+            <span id="lives-count" class="lives-count">6/6 lives</span>
+            <div id="life-dots" class="life-dots" aria-hidden="true"></div>
+          </div>
+          <button id="reset" class="ghost-btn" type="button">Reset Game</button>
+        </div>
+      </header>
+
+      <main class="game">
+        <section class="panel board-panel">
+          <div class="gallows-wrap">
+            <svg height="320" width="320" class="gallows" aria-hidden="true">
+              <line x1="50" y1="280" x2="280" y2="280" />
+              <line x1="110" y1="40" x2="110" y2="280" />
+              <line x1="110" y1="40" x2="250" y2="40" />
+              <line x1="250" y1="40" x2="250" y2="90" />
+            </svg>
+            <div class="hangman">
+              <div class="figure-part head"></div>
+              <div class="figure-part body"></div>
+              <div class="figure-part arm-left"></div>
+              <div class="figure-part arm-right"></div>
+              <div class="figure-part leg-left"></div>
+              <div class="figure-part leg-right"></div>
+            </div>
+          </div>
+          <p class="wrong-count">
+            <span id="wrong-letters">0 incorrect guesses</span>
+          </p>
+        </section>
+
+        <section class="panel control-panel">
+          <div class="info-card">
+            <h2>Keep Guessing</h2>
+            <p>Take your best shot—each wrong guess reveals a new body part.</p>
+            <p>
+              Lives left:
+              <strong id="lives-left">6</strong>
+            </p>
+          </div>
+          <div class="word" id="word"></div>
+          <div class="input-row">
+            <label class="sr-only" for="letter-input">Type a letter</label>
+            <input
+              id="letter-input"
+              type="text"
+              maxlength="1"
+              autocomplete="off"
+              placeholder="Type a letter"
+            />
+            <button id="guess-btn" type="button">Guess</button>
+          </div>
+          <p class="hint" id="hint"></p>
+          <div class="message" id="message" role="status" aria-live="polite"></div>
+          <section class="keyboard" id="keyboard" aria-label="Letter keyboard"></section>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
