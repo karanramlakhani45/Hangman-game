@@ -3,10 +3,6 @@
 A simple and interactive Hangman Game built using HTML, CSS, and JavaScript.
 Guess the correct word before the hangman drawing is completed!
 
-🚀 Demo
-
-(Add your live link here if deployed, e.g., Netlify or GitHub Pages)
-Live Demo: Coming soon
 
 📌 Features
 
@@ -95,6 +91,7 @@ For major changes, please open an issue first to discuss what you want to improv
 📄 License
 
 This project is open-source and available under the MIT License.
+
 
 
 
