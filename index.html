@@ -1,82 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hangman</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="shell">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">Classic Word Challenge</p>
-          <h1>Hangman Game</h1>
-          <p class="subtitle">
-            Guess the hidden tech term before the figure is complete.
-          </p>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hangman Game with Start Screen</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Start Screen -->
+  <div id="startScreen" class="start-screen">
+    <h1>Hangman Game</h1>
+    <p>Guess the hidden tech term before the figure is complete.</p>
+    <button id="startBtn" class="btn-start">Start Game</button>
+  </div>
+
+  <!-- Game Container (hidden initially) -->
+  <main id="gameContainer" class="container hidden">
+    <header class="header">
+      <div class="header-left">
+        <h1>Hangman Game</h1>
+        <div class="difficulty-select">
+          <label for="difficultySelect">Difficulty</label>
+          <select id="difficultySelect" aria-label="Select difficulty level">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
         </div>
-        <div class="hero-actions">
-          <div class="lives" aria-live="polite">
-            <span id="lives-count" class="lives-count">6/6 lives</span>
-            <div id="life-dots" class="life-dots" aria-hidden="true"></div>
+      </div>
+      <div class="header-right">
+        <div class="lives-text"><span id="livesLeftDisplay">6/6 lives</span>
+          <div class="lives-dots" aria-label="Lives left" role="img" aria-live="polite">
           </div>
-          <button id="reset" class="ghost-btn" type="button">Reset Game</button>
         </div>
-      </header>
+        <button id="resetBtn" class="btn-reset">Reset Game</button>
+      </div>
+    </header>
 
-      <main class="game">
-        <section class="panel board-panel">
-          <div class="gallows-wrap">
-            <svg height="320" width="320" class="gallows" aria-hidden="true">
-              <line x1="50" y1="280" x2="280" y2="280" />
-              <line x1="110" y1="40" x2="110" y2="280" />
-              <line x1="110" y1="40" x2="250" y2="40" />
-              <line x1="250" y1="40" x2="250" y2="90" />
-            </svg>
-            <div class="hangman">
-              <div class="figure-part head"></div>
-              <div class="figure-part body"></div>
-              <div class="figure-part arm-left"></div>
-              <div class="figure-part arm-right"></div>
-              <div class="figure-part leg-left"></div>
-              <div class="figure-part leg-right"></div>
-            </div>
-          </div>
-          <p class="wrong-count">
-            <span id="wrong-letters">0 incorrect guesses</span>
-          </p>
-        </section>
+    <section class="game-area">
+      <!-- Hangman figure -->
+      <div class="hangman-figure">
+        <svg height="250" width="200" class="figure-container" aria-label="Hangman figure">
+          <line x1="60" y1="20" x2="140" y2="20" />
+          <line x1="140" y1="20" x2="140" y2="50" />
+          <line x1="60" y1="20" x2="60" y2="230" />
+          <line x1="20" y1="230" x2="100" y2="230" />
 
-        <section class="panel control-panel">
-          <div class="info-card">
-            <h2>Keep Guessing</h2>
-            <p>Take your best shot—each wrong guess reveals a new body part.</p>
-            <p>
-              Lives left:
-              <strong id="lives-left">6</strong>
-            </p>
-          </div>
-          <div class="word" id="word"></div>
-          <div class="input-row">
-            <label class="sr-only" for="letter-input">Type a letter</label>
-            <input
-              id="letter-input"
-              type="text"
-              maxlength="1"
-              autocomplete="off"
-              placeholder="Type a letter"
-            />
-            <button id="guess-btn" type="button">Guess</button>
-          </div>
-          <p class="hint" id="hint"></p>
-          <div class="message" id="message" role="status" aria-live="polite"></div>
-          <section class="keyboard" id="keyboard" aria-label="Letter keyboard"></section>
-        </section>
-      </main>
-    </div>
+          <circle cx="140" cy="70" r="20" class="figure-part head hidden" />
+          <line x1="140" y1="90" x2="140" y2="150" class="figure-part body hidden" />
+          <line x1="140" y1="120" x2="110" y2="100" class="figure-part left-arm hidden" />
+          <line x1="140" y1="120" x2="170" y2="100" class="figure-part right-arm hidden" />
+          <line x1="140" y1="150" x2="110" y2="180" class="figure-part left-leg hidden" />
+          <line x1="140" y1="150" x2="170" y2="180" class="figure-part right-leg hidden" />
+        </svg>
+        <p class="incorrect" aria-live="polite" id="incorrectGuessCount">0 incorrect guesses</p>
+      </div>
 
-    <script src="script.js"></script>
-  </body>
+      <!-- Controls & info -->
+      <div class="game-controls">
+        <div class="instructions" aria-live="polite">
+          <strong>Keep Guessing</strong>
+          <p>Take your best shot—each wrong guess reveals a new body part.</p>
+          <p>Lives left: <strong id="livesLeft">6</strong></p>
+        </div>
+
+        <div class="word-container" aria-label="Word to guess" role="textbox" aria-live="polite"></div>
+
+        <div class="hint-section">
+          <div id="hintDisplay" class="hint-display" aria-live="polite"></div>
+        </div>
+
+        <form id="letterForm" autocomplete="off" aria-label="Letter guessing form">
+          <input
+            type="text"
+            id="letterInput"
+            class="letter-input"
+            maxlength="1"
+            pattern="[a-zA-Z]"
+            title="Type a letter"
+            placeholder="Type a letter"
+            aria-label="Guess a letter"
+            required
+          />
+          <button type="submit" class="btn-guess">Guess</button>
+        </form>
+
+        <div class="keyboard" aria-label="Letter buttons" role="group"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
 </html>
-
