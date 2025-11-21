@@ -1,227 +1,303 @@
-const wordEl = document.getElementById("word");
-const hintEl = document.getElementById("hint");
-const messageEl = document.getElementById("message");
-const wrongLettersEl = document.getElementById("wrong-letters");
-const keyboardEl = document.getElementById("keyboard");
-const resetBtn = document.getElementById("reset");
-const figureParts = Array.from(document.querySelectorAll(".figure-part"));
-const livesCountEl = document.getElementById("lives-count");
-const livesLeftEl = document.getElementById("lives-left");
-const lifeDotsEl = document.getElementById("life-dots");
-const letterInput = document.getElementById("letter-input");
-const guessBtn = document.getElementById("guess-btn");
+const wordHints = {
+  // Easy words
+  'code': 'Instructions written for a computer',
+  'bug': 'An error in a program',
+  'loop': 'Repeating a set of instructions',
+  'array': 'A collection of items stored in order',
+  'linux': 'An open-source operating system',
+  'cloud': 'Remote servers accessed over the internet',
+  'stack': 'A data structure that follows LIFO principle',
+  'debug': 'Finding and fixing errors in code',
+  'query': 'A request for data from a database',
+  'pixel': 'The smallest unit of a digital image',
+  // Medium words
+  'javascript': 'A popular programming language for web development',
+  'react': 'A JavaScript library for building user interfaces',
+  'nodejs': 'JavaScript runtime built on Chrome\'s V8 engine',
+  'python': 'A high-level programming language known for simplicity',
+  'algorithm': 'A step-by-step procedure for solving a problem',
+  'function': 'A reusable block of code that performs a task',
+  'variable': 'A container that stores a value',
+  'object': 'A collection of properties and methods',
+  'boolean': 'A data type with only two values: true or false',
+  'compiler': 'A program that translates code into machine language',
+  // Hard words
+  'asynchronous': 'Operations that don\'t block the execution thread',
+  'virtualization': 'Creating virtual versions of hardware or software',
+  'polymorphism': 'The ability to process objects differently based on their type',
+  'microservice': 'A small, independent service in a larger application',
+  'refactorings': 'Restructuring code without changing its functionality',
+  'cryptography': 'The practice of secure communication techniques',
+  'serialization': 'Converting data structures into a storable format',
+  'optimization': 'Improving code performance and efficiency',
+  'encapsulation': 'Bundling data and methods that operate on that data',
+  'dependencies': 'External packages or modules required by a project',
+};
 
-const WORDS = [
-  { word: "JAVASCRIPT", hint: "Language that powers the web." },
-  { word: "HYPERLINK", hint: "Allows you to click from page to page." },
-  { word: "BROWSER", hint: "Software you are using right now." },
-  { word: "ALGORITHM", hint: "A step-by-step recipe for solving a problem." },
-  { word: "COMPILER", hint: "Turns high-level code into machine instructions." },
-  { word: "FUNCTION", hint: "Reusable block of code with a name." },
-  { word: "VARIABLE", hint: "Symbolic name for storing a value." },
-  { word: "DATABASE", hint: "Stores structured information for apps." },
-  { word: "INTERFACE", hint: "Boundary for interacting with software." },
-  { word: "DEBUGGER", hint: "Tool used to inspect running code." }
-];
+const difficultySettings = {
+  easy: {
+    lives: 8,
+    words: [
+      'code',
+      'bug',
+      'loop',
+      'array',
+      'linux',
+      'cloud',
+      'stack',
+      'debug',
+      'query',
+      'pixel',
+    ],
+  },
+  medium: {
+    lives: 6,
+    words: [
+      'javascript',
+      'react',
+      'nodejs',
+      'python',
+      'algorithm',
+      'function',
+      'variable',
+      'object',
+      'boolean',
+      'compiler',
+    ],
+  },
+  hard: {
+    lives: 4,
+    words: [
+      'asynchronous',
+      'virtualization',
+      'polymorphism',
+      'microservice',
+      'refactorings',
+      'cryptography',
+      'serialization',
+      'optimization',
+      'encapsulation',
+      'dependencies',
+    ],
+  },
+};
 
-let selectedWord = "";
-let selectedHint = "";
-let correctLetters = new Set();
-let wrongLetters = new Set();
-let gameOver = false;
+const difficultySelect = document.getElementById('difficultySelect');
+let currentDifficulty = difficultySelect?.value || 'medium';
+if (!difficultySettings[currentDifficulty]) {
+  currentDifficulty = 'medium';
+}
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const maxLives = figureParts.length;
+let maxLives = difficultySettings[currentDifficulty].lives;
+let lives = maxLives;
+let chosenWord = '';
+let guessedLetters = new Set();
+let incorrectGuesses = 0;
 
-function setupKeyboard() {
-  keyboardEl.innerHTML = "";
+const figureParts = Array.from(document.querySelectorAll('.figure-part'));
+const incorrectText = document.getElementById('incorrectGuessCount');
+const wordContainer = document.querySelector('.word-container');
+const livesLeft = document.getElementById('livesLeft');
+const livesDotsContainer = document.querySelector('.lives-dots');
+let livesDots = [];
+const resetBtn = document.getElementById('resetBtn');
+const letterForm = document.getElementById('letterForm');
+const letterInput = document.getElementById('letterInput');
+const keyboard = document.querySelector('.keyboard');
 
-  alphabet.forEach((letter) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "key";
+const livesLeftDisplay = document.getElementById('livesLeftDisplay');
+
+const startScreen = document.getElementById('startScreen');
+const startBtn = document.getElementById('startBtn');
+const gameContainer = document.getElementById('gameContainer');
+const hintDisplay = document.getElementById('hintDisplay');
+
+function getRandomWord() {
+  const list = difficultySettings[currentDifficulty]?.words ?? [];
+  if (!list.length) return 'code';
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function renderLivesDots(total) {
+  if (!livesDotsContainer) return;
+  livesDotsContainer.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    livesDotsContainer.appendChild(dot);
+  }
+  livesDots = Array.from(livesDotsContainer.children);
+}
+
+// Initialize the letter buttons (keyboard)
+function initializeKeyboard() {
+  keyboard.innerHTML = '';
+  for (let i = 65; i <= 90; i++) {
+    const letter = String.fromCharCode(i);
+    const button = document.createElement('button');
     button.textContent = letter;
-    button.dataset.letter = letter;
-    button.addEventListener("click", () => handleGuess(letter));
-    keyboardEl.appendChild(button);
-  });
+    button.setAttribute('type', 'button');
+    button.setAttribute('aria-label', `Letter ${letter}`);
+    button.addEventListener('click', () => handleLetter(letter.toLowerCase()));
+    keyboard.appendChild(button);
+  }
 }
 
-function pickWord() {
-  const choice = WORDS[Math.floor(Math.random() * WORDS.length)];
-  selectedWord = choice.word;
-  selectedHint = choice.hint;
-}
+// Reset game state and UI
+function resetGame() {
+  maxLives = difficultySettings[currentDifficulty].lives;
+  lives = maxLives;
+  guessedLetters.clear();
+  incorrectGuesses = 0;
+  chosenWord = getRandomWord();
+  renderLivesDots(maxLives);
 
-function resetBoard() {
-  correctLetters = new Set();
-  wrongLetters = new Set();
-  gameOver = false;
-  messageEl.textContent = "";
-  figureParts.forEach((part) => (part.style.display = "none"));
-  Array.from(keyboardEl.children).forEach((button) => {
-    button.disabled = false;
-    button.classList.remove("used");
-  });
-  letterInput.value = "";
+  figureParts.forEach(part => part.classList.add('hidden'));
+  updateIncorrectGuessText();
+  livesLeft.textContent = lives;
+  livesLeftDisplay.textContent = `${lives}/${maxLives} lives`;
+
+  updateWordDisplay();
+  resetKeyboard();
+  updateHint();
+
   letterInput.disabled = false;
-  guessBtn.disabled = false;
-  hintEl.textContent = selectedHint;
-  updateWrongLetters();
-  updateWord();
-  renderLives();
+  letterInput.value = '';
+  letterInput.focus();
 }
 
-function updateWord() {
-  wordEl.innerHTML = "";
-
-  selectedWord.split("").forEach((letter) => {
-    const span = document.createElement("span");
-    span.className = "letter-slot";
-    span.textContent = correctLetters.has(letter) ? letter : "";
-    wordEl.appendChild(span);
+function resetKeyboard() {
+  Array.from(keyboard.children).forEach(button => {
+    button.classList.remove('used');
+    button.disabled = false;
   });
-
-  checkWin();
 }
 
-function updateWrongLetters() {
-  if (wrongLetters.size) {
-    wrongLettersEl.textContent = `${wrongLetters.size} incorrect guesses: ${Array.from(
-      wrongLetters
-    ).join(", ")}`;
+function updateWordDisplay() {
+  const display = chosenWord
+    .split('')
+    .map(letter => (guessedLetters.has(letter) ? letter.toUpperCase() : '_'))
+    .join(' ');
+  wordContainer.textContent = display;
+}
+
+function updateIncorrectGuessText() {
+  incorrectText.textContent = `${incorrectGuesses} incorrect guess${incorrectGuesses !== 1 ? 'es' : ''}`;
+}
+
+// Handle letter guessed either from keyboard or input form
+function handleLetter(letter) {
+  if (guessedLetters.has(letter) || lives <= 0) return;
+
+  guessedLetters.add(letter);
+  disableLetterButton(letter);
+
+  if (chosenWord.includes(letter)) {
+    updateWordDisplay();
+    checkWin();
   } else {
-    wrongLettersEl.textContent = "0 incorrect guesses";
+    incorrectGuesses++;
+    updateIncorrectGuessText();
+    showNextFigurePart();
+    decreaseLives();
+    checkLose();
   }
-
-  figureParts.forEach((part, idx) => {
-    part.style.display = idx < wrongLetters.size ? "block" : "none";
-  });
-
-  checkLoss();
-  renderLives();
 }
 
-function setMessage(text, tone = "") {
-  messageEl.textContent = text;
-  messageEl.dataset.tone = tone;
-}
-
-function disableKeyboard() {
-  Array.from(keyboardEl.children).forEach((button) => {
-    button.disabled = true;
-  });
-  letterInput.disabled = true;
-  guessBtn.disabled = true;
-}
-
-function handleGuess(letter) {
-  if (gameOver) return;
-  if (correctLetters.has(letter) || wrongLetters.has(letter)) return;
-
-  const button = keyboardEl.querySelector(`[data-letter="${letter}"]`);
+function disableLetterButton(letter) {
+  const button = Array.from(keyboard.children).find(
+    btn => btn.textContent.toLowerCase() === letter
+  );
   if (button) {
-    button.classList.add("used");
+    button.classList.add('used');
     button.disabled = true;
   }
+}
 
-  if (selectedWord.includes(letter)) {
-    correctLetters.add(letter);
-    setMessage(`Nice! "${letter}" is in the word.`, "positive");
-    updateWord();
-  } else {
-    wrongLetters.add(letter);
-    setMessage(`Nope, "${letter}" is not there.`, "negative");
-    updateWrongLetters();
+function showNextFigurePart() {
+  if (incorrectGuesses <= figureParts.length) {
+    figureParts[incorrectGuesses - 1].classList.remove('hidden');
+  }
+}
+
+function decreaseLives() {
+  lives--;
+  livesLeft.textContent = lives;
+  livesLeftDisplay.textContent = `${lives}/${maxLives} lives`;
+  if (livesDots[lives]) {
+    livesDots[lives].classList.add('inactive');
   }
 }
 
 function checkWin() {
-  const uniqueLetters = new Set(selectedWord.split(""));
-  if (uniqueLetters.size > 0 && uniqueLetters.size === correctLetters.size) {
-    gameOver = true;
-    setMessage("You solved it! 🎉", "positive");
-    disableKeyboard();
+  const won = chosenWord.split('').every(letter => guessedLetters.has(letter));
+  if (won) {
+    setTimeout(() => {
+      alert(`🎉 Congrats! You guessed the word "${chosenWord.toUpperCase()}" correctly!`);
+    }, 200);
+    disableInput();
   }
 }
 
-function checkLoss() {
-  if (wrongLetters.size === figureParts.length) {
-    gameOver = true;
-    setMessage(`You lost! The word was ${selectedWord}.`, "negative");
-    disableKeyboard();
+function checkLose() {
+  if (lives <= 0) {
+    setTimeout(() => {
+      alert(`😞 Game over! The word was "${chosenWord.toUpperCase()}".`);
+    }, 200);
     revealWord();
+    disableInput();
   }
 }
 
 function revealWord() {
-  wordEl.innerHTML = "";
+  const display = chosenWord
+    .split('')
+    .map(letter => letter.toUpperCase())
+    .join(' ');
+  wordContainer.textContent = display;
+}
 
-  selectedWord.split("").forEach((letter) => {
-    const span = document.createElement("span");
-    span.className = "letter-slot";
-    span.textContent = letter;
-    wordEl.appendChild(span);
+function disableInput() {
+  letterInput.disabled = true;
+  Array.from(keyboard.children).forEach(button => button.disabled = true);
+}
+
+function updateHint() {
+  if (!hintDisplay || !chosenWord) return;
+  const hint = wordHints[chosenWord] || 'No hint available for this word.';
+  hintDisplay.textContent = hint;
+}
+
+// Form submission
+letterForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const letter = letterInput.value.trim().toLowerCase();
+  if (/^[a-z]$/.test(letter)) {
+    handleLetter(letter);
+  }
+  letterInput.value = '';
+  letterInput.focus();
+});
+
+// Reset button
+resetBtn.addEventListener('click', resetGame);
+
+// Start screen button click
+startBtn.addEventListener('click', () => {
+  startScreen.classList.add('hidden');
+  gameContainer.classList.remove('hidden');
+  resetGame();
+});
+
+if (difficultySelect) {
+  difficultySelect.addEventListener('change', e => {
+    const selected = e.target.value;
+    if (difficultySettings[selected]) {
+      currentDifficulty = selected;
+      resetGame();
+    }
   });
 }
 
-function resetGame() {
-  pickWord();
-  resetBoard();
-}
-
-function handleKeydown(event) {
-  if (event.target === letterInput) {
-    if (event.key === "Enter") {
-      submitTypedLetter();
-    }
-    return;
-  }
-
-  const letter = event.key?.toUpperCase();
-  if (alphabet.includes(letter)) {
-    handleGuess(letter);
-  } else if (event.key === "Enter" && gameOver) {
-    resetGame();
-  }
-}
-
-function submitTypedLetter() {
-  const value = letterInput.value.trim().toUpperCase();
-  if (!value) return;
-  const letter = value[0];
-  if (!alphabet.includes(letter)) {
-    setMessage("Please enter a letter A-Z.", "negative");
-    return;
-  }
-  letterInput.value = "";
-  handleGuess(letter);
-}
-
-function renderLives() {
-  const livesLeft = Math.max(0, maxLives - wrongLetters.size);
-  livesCountEl.textContent = `${livesLeft}/${maxLives} lives`;
-  livesLeftEl.textContent = livesLeft;
-
-  lifeDotsEl.innerHTML = "";
-  for (let i = 0; i < maxLives; i += 1) {
-    const dot = document.createElement("span");
-    if (i >= livesLeft) {
-      dot.classList.add("off");
-    }
-    lifeDotsEl.appendChild(dot);
-  }
-}
-
-function init() {
-  setupKeyboard();
-  pickWord();
-  resetBoard();
-}
-
-guessBtn.addEventListener("click", submitTypedLetter);
-resetBtn.addEventListener("click", resetGame);
-document.addEventListener("keydown", handleKeydown);
-
-init();
-
+// Initialize on load
+initializeKeyboard();
