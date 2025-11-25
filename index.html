@@ -5,13 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hangman Game with Start Screen</title>
   <link rel="stylesheet" href="style.css" />
+  
 </head>
 <body>
+  <!-- Auth Screen -->
+  <div id="authContainer" class="auth-container">
+    <div class="auth-card">
+      <h1>Hangman Arena</h1>
+      <p class="auth-subtitle">Sign in to save your progress and climb the leaderboard.</p>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab active" data-auth-tab="login" role="tab" aria-selected="true">
+          Log In
+        </button>
+        <button type="button" class="auth-tab" data-auth-tab="signup" role="tab" aria-selected="false">
+          Sign Up
+        </button>
+      </div>
+
+      <form id="loginForm" class="auth-form" autocomplete="off">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" required />
+
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required />
+
+        <button type="submit" class="btn-start">Log In</button>
+        <p class="form-error" id="loginError" aria-live="polite"></p>
+      </form>
+
+      <form id="signupForm" class="auth-form hidden" autocomplete="off">
+        <label for="signupUsername">Username</label>
+        <input type="text" id="signupUsername" placeholder="Choose a username" required />
+
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="Create a password" required minlength="4" />
+
+        <label for="signupConfirmPassword">Confirm Password</label>
+        <input type="password" id="signupConfirmPassword" placeholder="Re-type password" required minlength="4" />
+
+        <button type="submit" class="btn-start">Create Account</button>
+        <p class="form-error" id="signupError" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
   <!-- Start Screen -->
-  <div id="startScreen" class="start-screen">
-    <h1>Hangman Game</h1>
-    <p>Guess the hidden tech term before the figure is complete.</p>
-    <button id="startBtn" class="btn-start">Start Game</button>
+  <div id="startScreen" class="start-screen hidden">
+    <div class="start-header">
+      <div>
+        <p class="welcome-text" id="welcomeText">Welcome back!</p>
+        <h1>Hangman Game</h1>
+        <p>Guess the hidden tech term before the figure is complete.</p>
+      </div>
+      <div class="player-badge">
+        <span>Logged in as</span>
+        <strong id="currentUserDisplay">Player</strong>
+      </div>
+    </div>
+    <div class="start-actions">
+      <button id="startBtn" class="btn-start">Start Game</button>
+      <button class="btn-secondary" data-open-leaderboard>Leaderboard</button>
+      <button id="logoutBtn" class="btn-outline">Log Out</button>
+    </div>
   </div>
 
   <!-- Game Container (hidden initially) -->
@@ -33,6 +89,7 @@
           <div class="lives-dots" aria-label="Lives left" role="img" aria-live="polite">
           </div>
         </div>
+        <button class="btn-outline small" data-open-leaderboard>Leaderboard</button>
         <button id="resetBtn" class="btn-reset">Reset Game</button>
       </div>
     </header>
@@ -89,6 +146,20 @@
       </div>
     </section>
   </main>
+
+  <!-- Leaderboard -->
+  <div id="leaderboardPanel" class="leaderboard-panel hidden" aria-modal="true" role="dialog">
+    <div class="leaderboard-card">
+      <div class="leaderboard-header">
+        <div>
+          <p class="leaderboard-subtitle">Top Hangman Survivors</p>
+          <h2>Leaderboard</h2>
+        </div>
+        <button id="closeLeaderboardBtn" class="btn-outline small">Close</button>
+      </div>
+      <ol id="leaderboardList" class="leaderboard-list"></ol>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
