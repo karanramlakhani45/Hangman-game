@@ -7,9 +7,9 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #f9faff;
+  background-color: #2d44b3;
   color: #121212;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,6 +19,135 @@ body {
 /* Utility Classes */
 .hidden {
   display: none !important;
+}
+
+/* --- Auth Screen --- */
+.auth-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.auth-card {
+  background: white;
+  padding: 48px 40px;
+  border-radius: 20px;
+  box-shadow:
+    0 2px 8px rgb(0 0 0 / 0.1),
+    0 12px 24px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-card h1 {
+  margin: 0;
+  font-size: 2.6rem;
+}
+
+.auth-subtitle {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 12px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  padding: 6px;
+}
+
+.auth-tab {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: #475569;
+  transition: background 0.2s, color 0.2s;
+}
+
+.auth-tab.active {
+  background: white;
+  color: #1e293b;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.08);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.auth-form input {
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 2px solid #e2e8f0;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #2a64f6;
+  box-shadow: 0 0 0 3px rgb(42 100 246 / 0.15);
+}
+
+.form-error {
+  min-height: 20px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.form-error.success {
+  color: #15803d;
+}
+
+.btn-secondary,
+.btn-outline {
+  cursor: pointer;
+  border-radius: 32px;
+  font-weight: 700;
+  padding: 12px 24px;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-secondary {
+  border: none;
+  background-color: #facc15;
+  color: #0f172a;
+}
+
+.btn-secondary:hover {
+  background-color: #eab308;
+}
+
+.btn-outline {
+  border: 2px solid #cbd5f5;
+  color: #1e293b;
+  background: transparent;
+}
+
+.btn-outline.small {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
+.btn-outline:hover {
+  border-color: #2a64f6;
+  color: #2a64f6;
 }
 
 /* --- Start Screen --- */
@@ -34,15 +163,59 @@ body {
   text-align: center;
 }
 
+.start-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
 .start-screen h1 {
   font-size: 2.8rem;
-  margin-bottom: 16px;
+  margin: 12px 0;
 }
 
 .start-screen p {
   font-size: 1.1rem;
-  margin-bottom: 32px;
+  margin: 0;
   color: #444;
+}
+
+.welcome-text {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.player-badge {
+  background: #eff6ff;
+  border-radius: 16px;
+  padding: 12px 18px;
+  text-align: right;
+  color: #1e3a8a;
+  min-width: 160px;
+}
+
+.player-badge span {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.player-badge strong {
+  display: block;
+  font-size: 1.3rem;
+  margin-top: 4px;
+}
+
+.start-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
 }
 
 .btn-start {
@@ -59,6 +232,95 @@ body {
 
 .btn-start:hover {
   background-color: #1c44b2;
+}
+
+/* Leaderboard modal */
+.leaderboard-panel {
+  position: fixed;
+  inset: 0;
+  background: rgb(15 23 42 / 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.leaderboard-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  width: min(600px, 100%);
+  box-shadow:
+    0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.leaderboard-subtitle {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.leaderboard-card h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.leaderboard-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid transparent;
+  gap: 12px;
+}
+
+.leaderboard-list li strong {
+  font-size: 1.1rem;
+}
+
+.leaderboard-list li span.rank {
+  font-weight: 700;
+  color: #94a3b8;
+  min-width: 30px;
+}
+
+.leaderboard-list li .score {
+  font-weight: 700;
+  color: #15803d;
+}
+
+.leaderboard-list li.me {
+  border-color: #2a64f6;
+  background: #e0e7ff;
+}
+
+.leaderboard-list li.empty {
+  justify-content: center;
+  color: #94a3b8;
 }
 
 /* --- Game Container --- */
